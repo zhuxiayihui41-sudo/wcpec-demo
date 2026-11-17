@@ -36,15 +36,14 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
 #visits{margin-top:10px}
 </style>
 
-<!-- Visitor counting (free): GoatCounter. Replace YOUR-CODE with your GoatCounter code. -->
-<script>window.GOATCOUNTER_CODE = "YOUR-CODE";</script>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K1VC9QQ1PJ"></script>
 <script>
-  if (window.GOATCOUNTER_CODE !== "YOUR-CODE") {
-    var s = document.createElement("script");
-    s.async = true; s.src = "https://gc.zgo.at/count.js";
-    s.setAttribute("data-goatcounter", "https://" + window.GOATCOUNTER_CODE + ".goatcounter.com/count");
-    document.head.appendChild(s);
-  }
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K1VC9QQ1PJ');
 </script>
 </head>
 <body>
@@ -96,21 +95,20 @@ footer{border-top:1px solid var(--line);padding:26px 0 44px;color:var(--muted);f
 </footer>
 
 <script>
-/* Count each video's first play as an event in GoatCounter */
-document.querySelectorAll("video").forEach(v=>{
-  let sent=false;
-  v.addEventListener("play",()=>{
-    if(sent) return; sent=true;
-    try{ window.goatcounter && window.goatcounter.count({path:"play-"+v.dataset.name, title:v.closest("section").querySelector("h2").textContent, event:true}); }catch(e){}
+/* Count each video's first play as an event in Google Analytics */
+document.querySelectorAll("video").forEach(v => {
+  let sent = false;
+  v.addEventListener("play", () => {
+    if (sent) return;
+    sent = true;
+    if (typeof gtag === "function") {
+      gtag("event", "video_play", {
+        video_name: v.dataset.name,
+        video_title: v.closest("section").querySelector("h2").textContent
+      });
+    }
   });
 });
-/* Optional public counter (enable "Allow adding visitor counts on your website" in GoatCounter settings) */
-(function(){
-  const c=window.GOATCOUNTER_CODE; if(c==="YOUR-CODE") return;
-  fetch("https://"+c+".goatcounter.com/counter/TOTAL.json").then(r=>r.ok?r.json():null).then(d=>{
-    if(d&&d.count) document.getElementById("visits").textContent=d.count+" visits";
-  }).catch(()=>{});
-})();
 </script>
 </body>
 </html>
